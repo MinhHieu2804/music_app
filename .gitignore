@@ -1,0 +1,46 @@
+# Miscellaneous
+/music_app/*.class
+/music_app/*.log
+/music_app/*.pyc
+/music_app/*.swp
+/music_app/.DS_Store
+/music_app/.atom/
+/music_app/.buildlog/
+/music_app/.history
+/music_app/.svn/
+
+# IntelliJ related
+/music_app/*.iml
+/music_app/*.ipr
+/music_app/*.iws
+/music_app/.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+/music_app/**/doc/api/
+/music_app/**/ios/Flutter/.last_build_id
+/music_app/.dart_tool/
+/music_app/.flutter-plugins
+/music_app/.flutter-plugins-dependencies
+/music_app/.packages
+/music_app/.pub-cache/
+/music_app/.pub/
+/music_app/build/
+
+# Web related
+/music_app/lib/generated_plugin_registrant.dart
+
+# Symbolication related
+/music_app/app.*.symbols
+
+# Obfuscation related
+/music_app/app.*.map.json
+
+# Android Studio will place build artifacts here
+/music_app/android/app/debug
+/music_app/android/app/profile
+/music_app/android/app/release
