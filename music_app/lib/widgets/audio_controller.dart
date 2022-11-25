@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:music_app/providers/playing_list.dart';
 import 'package:music_app/providers/playing_song.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../providers/auth.dart';
 
 class AudioController extends StatefulWidget {
   const AudioController({Key? key}) : super(key: key);
@@ -14,11 +17,20 @@ class _AudioControllerState extends State<AudioController> {
   var duration = Duration();
   var position = Duration(seconds: 0);
   bool isPlaying = true;
-  bool isSuffle = false;
+  bool isShuffle = false;
   bool isReplay = false;
 
   @override
   void initState() {
+    setState(() {
+      isPlaying = Provider.of<PlayingSong>(context, listen: false).isPlaying;
+      isReplay = Provider.of<PlayingSong>(context, listen: false).isReplay;
+      isShuffle = Provider.of<PlayingSong>(context, listen: false).isShuffle;
+    });
+    if (isShuffle) {
+      Provider.of<PlayingList>(context, listen: false).getShuffle();
+    }
+
     Duration temp = Duration(seconds: 0);
     Duration temp2 = Duration(seconds: 0);
     Provider.of<PlayingSong>(context, listen: false)
@@ -41,6 +53,40 @@ class _AudioControllerState extends State<AudioController> {
     });
 
     super.initState();
+  }
+
+  void showCreateDialog(BuildContext context, int songid) async {
+    await Provider.of<Auth>(context, listen: false).fetchPlaylists();
+    var playlist = Provider.of<Auth>(context, listen: false).playlists;
+    showDialog(
+        context: context,
+        builder: (ctx) {
+          return SimpleDialog(
+            title: Center(child: const Text('Add to your playlists:')),
+            children: playlist.isEmpty
+                ? List.generate(
+                    1,
+                    (ctx) => Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: Center(
+                              child: Text('You don\'t have any playlist')),
+                        )) as List<Widget>
+                : [
+                    ...playlist.map(
+                      (e) => TextButton(
+                          onPressed: () async {
+                            await Provider.of<Auth>(context, listen: false)
+                                .addSongToPlaylist(e.id, songid);
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            e.name,
+                            style: TextStyle(fontSize: 20),
+                          )),
+                    )
+                  ],
+          );
+        });
   }
 
   @override
@@ -68,7 +114,9 @@ class _AudioControllerState extends State<AudioController> {
         onChanged: (double value) {
           setState(() {
             changeToSecond(value.toInt());
-            value = value;
+            if (value <= duration.inSeconds.toDouble()) {
+              value = value;
+            }
           });
         },
       );
@@ -109,11 +157,30 @@ class _AudioControllerState extends State<AudioController> {
                   children: [
                     IconButton(
                       iconSize: 22,
-                      onPressed: () {},
+                      onPressed: () {
+                        playingsong.isShuffle = !playingsong.isShuffle;
+                        setState(() {
+                          isShuffle = playingsong.isShuffle;
+                        });
+                        if (isShuffle) {
+                          Provider.of<PlayingList>(context, listen: false)
+                              .getShuffle();
+                        } else {
+                          Provider.of<PlayingList>(context, listen: false)
+                              .unShuffle();
+                        }
+                      },
+                      color: isShuffle ? Colors.blue : Colors.black,
                       icon: FaIcon(FontAwesomeIcons.shuffle),
                     ),
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          int pre =
+                              Provider.of<PlayingList>(context, listen: false)
+                                  .getPreSong(playingsong.id as int);
+                          Provider.of<PlayingSong>(context, listen: false)
+                              .setPlayingSong(pre);
+                        },
                         iconSize: 30,
                         icon: FaIcon(FontAwesomeIcons.stepBackward)),
                     IconButton(
@@ -136,12 +203,24 @@ class _AudioControllerState extends State<AudioController> {
                               : FontAwesomeIcons.solidCirclePlay,
                         )),
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          int next =
+                              Provider.of<PlayingList>(context, listen: false)
+                                  .getNextSong(playingsong.id as int);
+                          Provider.of<PlayingSong>(context, listen: false)
+                              .setPlayingSong(next);
+                        },
                         iconSize: 30,
                         icon: FaIcon(FontAwesomeIcons.stepForward)),
                     IconButton(
                         iconSize: 22,
-                        onPressed: () {},
+                        onPressed: () {
+                          playingsong.isReplay = !playingsong.isReplay;
+                          setState(() {
+                            isReplay = playingsong.isReplay;
+                          });
+                        },
+                        color: isReplay ? Colors.blue : Colors.black,
                         icon: FaIcon(
                           FontAwesomeIcons.repeat,
                         )),
@@ -157,13 +236,7 @@ class _AudioControllerState extends State<AudioController> {
                   SizedBox(),
                   IconButton(
                       onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (ctx) => Card(
-                                  child: Center(
-                                    child: Text('Add playlist'),
-                                  ),
-                                ));
+                        showCreateDialog(context, playingsong.id as int);
                       },
                       icon: FaIcon(FontAwesomeIcons.list))
                 ],

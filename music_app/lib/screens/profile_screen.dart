@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_app/providers/playing_song.dart';
 import 'package:music_app/providers/screen.dart';
 import 'package:provider/provider.dart';
 
@@ -82,9 +83,12 @@ class _ProfileState extends State<Profile> {
   Widget _heading(String heading) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.80, //80% of width,
-      child: Text(
-        heading,
-        style: TextStyle(fontSize: 16),
+      child: Padding(
+        padding: EdgeInsets.all(10),
+        child: Text(
+          heading,
+          style: TextStyle(fontSize: 20),
+        ),
       ),
     );
   }
@@ -106,8 +110,9 @@ class _ProfileState extends State<Profile> {
               color: Colors.black87,
             ),
             ListTile(
-              leading: Icon(Icons.phone),
-              title: Text("1234567890"),
+              leading: Icon(Icons.person),
+              title: Text('ID: ' +
+                  Provider.of<Auth>(context, listen: false).userId.toString()),
             ),
             Divider(
               height: 0.6,
@@ -126,13 +131,18 @@ class _ProfileState extends State<Profile> {
   Widget logoutButton() {
     return InkWell(
       onTap: () {
+        Provider.of<PlayingSong>(context, listen: false).clear();
         Provider.of<Screen>(context, listen: false).setCurrentScreen(0, "", -1);
         Provider.of<Auth>(context, listen: false).logout();
       },
       child: Container(
-          color: Colors.orange,
+          decoration: BoxDecoration(
+              color: Color.fromARGB(255, 79, 190, 97),
+              borderRadius: BorderRadius.circular(10)),
+          margin: EdgeInsets.symmetric(horizontal: 10),
+          // color: Color.fromARGB(255, 79, 190, 97),
           child: Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(15.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

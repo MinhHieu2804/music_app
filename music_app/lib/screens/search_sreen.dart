@@ -29,6 +29,10 @@ class _SearchScreenState extends State<SearchScreen> {
             margin: EdgeInsets.symmetric(horizontal: 10),
             child: TextField(
               onChanged: (_) async {
+                if (searchController.text == "") {
+                  await Provider.of<Search>(context, listen: false)
+                      .emptySearch();
+                }
                 await searchFunction.search(searchController.text);
               },
               controller: searchController,
@@ -47,7 +51,10 @@ class _SearchScreenState extends State<SearchScreen> {
                       borderRadius: BorderRadius.circular(20))),
             ),
           ),
-          SearchResult()
+          SearchResult(),
+          SizedBox(
+            height: 50,
+          )
         ],
       ),
     );

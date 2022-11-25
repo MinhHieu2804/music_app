@@ -1,18 +1,20 @@
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
 import 'package:flutter/material.dart';
 import 'package:music_app/providers/playing_song.dart';
 import 'package:music_app/widgets/audio_controller.dart';
 import 'package:provider/provider.dart';
 
-class SongDetailScreen extends StatelessWidget {
+class SongDetailScreen extends StatefulWidget {
   static final String routeName = '/songdetail';
   const SongDetailScreen({Key? key}) : super(key: key);
 
   @override
+  State<SongDetailScreen> createState() => _SongDetailScreenState();
+}
+
+class _SongDetailScreenState extends State<SongDetailScreen> {
+  @override
   Widget build(BuildContext context) {
-    var song = Provider.of<PlayingSong>(context, listen: false);
+    var song = Provider.of<PlayingSong>(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -62,13 +64,16 @@ class SongDetailScreen extends StatelessWidget {
           Center(
             child: Container(
               margin: const EdgeInsets.only(top: 28),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  song.image as String,
-                  height: 345,
-                  width: 346,
-                  fit: BoxFit.cover,
+              child: Card(
+                elevation: 50,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    song.image as String,
+                    height: 345,
+                    width: 346,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),

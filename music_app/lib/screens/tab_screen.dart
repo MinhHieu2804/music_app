@@ -4,6 +4,7 @@ import 'package:music_app/providers/screen.dart';
 import 'package:music_app/screens/artist_song_list_screen.dart';
 import 'package:music_app/screens/home_screen.dart';
 import 'package:music_app/screens/library_screen.dart';
+import 'package:music_app/screens/playlist_songs_screen.dart';
 import 'package:music_app/screens/profile_screen.dart';
 import 'package:music_app/screens/search_sreen.dart';
 import 'package:music_app/screens/song_detail_screen.dart';
@@ -47,12 +48,16 @@ class _TabScreenState extends State<TabScreen> {
         'title': 'Account',
       },
       {
-        'page': SongLists("pop"),
+        'page': SongLists(),
         'title': 'SongLists',
       },
       {
         'page': ArtistSongListScreen(),
         'title': 'artistSongLists',
+      },
+      {
+        'page': PlaylistSongsScreen(),
+        'title': 'playListSongs',
       },
     ];
 
@@ -71,10 +76,10 @@ class _TabScreenState extends State<TabScreen> {
   Widget build(BuildContext context) {
     var playingSong = Provider.of<PlayingSong>(context);
     int i = context.watch<Screen>().currentScreen;
-    _pages[4] = {
-      'page': SongLists(Provider.of<Screen>(context, listen: false).artistName),
-      'title': 'SongLists',
-    };
+    // _pages[4] = {
+    //   'page': SongLists(),
+    //   'title': 'SongLists',
+    // };
     return Scaffold(
       body: _pages[i]['page'] as Widget,
       bottomSheet: playingSong.id != null
