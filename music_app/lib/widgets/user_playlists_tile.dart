@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:music_app/providers/auth.dart';
 import 'package:music_app/providers/playlist.dart';
+import 'package:music_app/providers/screen.dart';
 import 'package:provider/provider.dart';
 
 class UserPlaylistsTile extends StatelessWidget {
@@ -14,6 +15,12 @@ class UserPlaylistsTile extends StatelessWidget {
     return Card(
       margin: EdgeInsets.all(10),
       child: InkWell(
+        onTap: () async {
+          await Provider.of<Screen>(context, listen: false)
+              .setPlayListId(playlist.id);
+          Provider.of<Screen>(context, listen: false)
+              .setCurrentScreen(6, "", -1);
+        },
         child: Padding(
             padding: EdgeInsets.all(8),
             child: ListTile(

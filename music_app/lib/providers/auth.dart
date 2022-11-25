@@ -16,6 +16,8 @@ class Auth with ChangeNotifier {
     return _token != null;
   }
 
+  String get token => _token!;
+
   String get userName => _userName;
 
   String get userEmail => _userEmail!;
@@ -156,5 +158,26 @@ class Auth with ChangeNotifier {
     final respose =
         await http.delete(url, headers: {'Authorization': 'Bearer ' + _token!});
     fetchPlaylists();
+  }
+
+  Future<void> addSongToPlaylist(int playlistId, int songId) async {
+    print(songId);
+    print(_token);
+    print(playlistId);
+
+    final url = Uri.parse('https://conkhunglongnene.site/playlist/$playlistId');
+    final respose = await http.put(url,
+        headers: {
+          'Authorization': 'Bearer ' + _token!,
+          'Content-Type': 'application/json'
+        },
+        body: json.encode({
+          "songIds": [songId]
+        }));
+    final responseData = json.decode(respose.body);
+    print(responseData);
+    print(json.encode({
+      "songIds": [songId]
+    }));
   }
 }

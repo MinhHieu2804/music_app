@@ -73,9 +73,21 @@ class PlayingSong with ChangeNotifier {
 
   Duration getPosition() {
     audioPlayer.onAudioPositionChanged.listen((event) {
-      position = event;
+      if (event <= duration) {
+        position = event;
+      }
     });
     notifyListeners();
     return position;
+  }
+
+  Future<void> clear() async {
+    id = null;
+    image = "";
+    name = "";
+    source = "";
+    isPlaying = false;
+    audioPlayer.stop();
+    notifyListeners();
   }
 }

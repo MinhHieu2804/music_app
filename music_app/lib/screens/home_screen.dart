@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:music_app/providers/albums.dart';
 import 'package:music_app/providers/artist.dart';
 import 'package:music_app/providers/artists.dart';
+import 'package:music_app/providers/playing_list.dart';
 import 'package:music_app/providers/songs.dart';
 import 'package:music_app/widgets/home_grid.dart';
 import 'package:music_app/widgets/home_list.dart';
@@ -22,6 +24,9 @@ class _HomeSreenState extends State<HomeSreen> {
   Future<void> fetchData() async {
     await Provider.of<Aritsts>(context, listen: false).fetchArtistList();
     await Provider.of<Songs>(context, listen: false).fetchHomeSong();
+    await Provider.of<Albums>(context, listen: false).fetchAlbum();
+    Provider.of<PlayingList>(context, listen: false)
+        .setPlayingList(Provider.of<Songs>(context, listen: false).items);
   }
 
   @override

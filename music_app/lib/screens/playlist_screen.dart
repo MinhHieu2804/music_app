@@ -101,7 +101,8 @@ class _PlayListScreenState extends State<PlayListScreen> {
             ),
           ),
         ),
-        _isLoading ? CircularProgressIndicator() : UserPlaylist()
+        _isLoading ? CircularProgressIndicator() : UserPlaylist(),
+        SizedBox(height: 70),
       ]),
     );
   }

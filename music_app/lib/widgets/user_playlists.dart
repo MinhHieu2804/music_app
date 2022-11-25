@@ -14,8 +14,15 @@ class _UserPlaylistState extends State<UserPlaylist> {
     var playlists = Provider.of<Auth>(context).playlists;
 
     return playlists.isEmpty
-        ? Center(
-            child: Text('Add some playlist'),
+        ? Expanded(
+            child: Center(
+              child: Text(
+                'Add some playlist',
+                style: TextStyle(
+                  fontSize: 17,
+                ),
+              ),
+            ),
           )
         : Expanded(
             child: ListView(
