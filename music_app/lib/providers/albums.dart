@@ -10,8 +10,7 @@ class Albums with ChangeNotifier {
 
   Future<void> fetchAlbum() async {
     try {
-      final url =
-          Uri.parse('https://conkhunglongnene.site/album?page=1&size=50');
+      final url = Uri.parse('http://10.0.2.2:3001/album?page=1&size=50');
       final response = await http.get(url);
       final responseData = json.decode(response.body);
       if (responseData['status'] > 200) {
@@ -20,8 +19,8 @@ class Albums with ChangeNotifier {
       }
       List<Album> loadedAlbum = [];
       responseData['data']['rows'].forEach((al) {
-        loadedAlbum.add(Album(al['id'],
-            'https://conkhunglongnene.site' + al['cover'], al['name']));
+        loadedAlbum.add(
+            Album(al['id'], 'http://10.0.2.2:3001' + al['cover'], al['name']));
       });
       items = loadedAlbum;
     } catch (err) {

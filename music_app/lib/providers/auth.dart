@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, use_rethrow_when_possible
+
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
@@ -28,8 +30,8 @@ class Auth with ChangeNotifier {
 
   Future<void> login(String username, String password) async {
     try {
-      final url = Uri.parse("https://conkhunglongnene.site/auth/login");
-      final urlInfo = Uri.parse("https://conkhunglongnene.site/user");
+      final url = Uri.parse("http://10.0.2.2:3001/auth/login");
+      final urlInfo = Uri.parse("http://10.0.2.2:3001/user");
 
       final response = await http
           .post(url, body: {'username': username, 'password': password});
@@ -83,7 +85,7 @@ class Auth with ChangeNotifier {
   Future<void> signup(String username, String name, String password,
       String email, BuildContext context) async {
     try {
-      final url = Uri.parse("https://conkhunglongnene.site/auth/register");
+      final url = Uri.parse("http://10.0.2.2:3001/auth/register");
       final response = await http.post(url, body: {
         'username': username,
         'name': name,
@@ -99,7 +101,7 @@ class Auth with ChangeNotifier {
                   title: Text('Login now!'),
                   content: Text('Your account has been created!'),
                   actions: <Widget>[
-                    FlatButton(
+                    TextButton(
                       child: Text('Okay'),
                       onPressed: () {
                         Navigator.of(ctx).pop();
@@ -124,8 +126,7 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> fetchPlaylists() async {
-    final url =
-        Uri.parse('https://conkhunglongnene.site/playlist?size=10&page=1');
+    final url = Uri.parse('http://10.0.2.2:3001/playlist?size=10&page=1');
     final respose =
         await http.get(url, headers: {'Authorization': 'Bearer ' + _token!});
     final responseData = json.decode(respose.body);
@@ -143,7 +144,7 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> createPlaylist(String name) async {
-    final url = Uri.parse('https://conkhunglongnene.site/playlist/');
+    final url = Uri.parse('http://10.0.2.2:3001/playlist/');
     final response = await http.post(url, body: {
       'name': name,
     }, headers: {
@@ -154,7 +155,7 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> deletePlaylist(int id) async {
-    final url = Uri.parse('https://conkhunglongnene.site/playlist/$id');
+    final url = Uri.parse('http://10.0.2.2:3001/playlist/$id');
     final respose =
         await http.delete(url, headers: {'Authorization': 'Bearer ' + _token!});
     fetchPlaylists();
@@ -165,7 +166,7 @@ class Auth with ChangeNotifier {
     print(_token);
     print(playlistId);
 
-    final url = Uri.parse('https://conkhunglongnene.site/playlist/$playlistId');
+    final url = Uri.parse('http://10.0.2.2:3001/playlist/$playlistId');
     final respose = await http.put(url,
         headers: {
           'Authorization': 'Bearer ' + _token!,

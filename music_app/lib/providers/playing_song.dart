@@ -6,7 +6,7 @@ import 'package:music_app/providers/artist.dart';
 import 'package:http/http.dart' as http;
 import 'package:music_app/providers/song.dart';
 
-const URL = 'https://conkhunglongnene.site';
+const URL = 'http://10.0.2.2:3001';
 
 class PlayingSong with ChangeNotifier {
   int? id;
@@ -23,7 +23,7 @@ class PlayingSong with ChangeNotifier {
   List<Song> history = [];
 
   Future<void> setPlayingSong(int id) async {
-    final url = Uri.parse('https://conkhunglongnene.site/song/$id');
+    final url = Uri.parse('http://10.0.2.2:3001/song/$id');
     final response = await http.get(url);
     final responseData = json.decode(response.body);
     if (responseData['status'] > 200) {

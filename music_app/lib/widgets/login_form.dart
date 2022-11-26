@@ -53,7 +53,7 @@ class _LoginFormState extends State<LoginForm> {
         title: Text('An Error Occurred!'),
         content: Text(message),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: Text('Okay'),
             onPressed: () {
               Navigator.of(ctx).pop();
@@ -228,7 +228,7 @@ class _LoginFormState extends State<LoginForm> {
                       ),
                 if (isLogin)
                   Padding(padding: EdgeInsets.only(top: 20), child: Text('or')),
-                FlatButton(
+                TextButton(
                     onPressed: changeState,
                     child: Text(isLogin ? 'Create a new account' : 'Login')),
               ],
