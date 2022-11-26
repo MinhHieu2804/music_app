@@ -15,15 +15,20 @@ class _LikeScreenState extends State<LikeScreen> {
   Widget build(BuildContext context) {
     var history = Provider.of<PlayingSong>(context).history.toList().reversed;
     return Scaffold(
-      body: Column(
-        children: [
-          ...history.map((e) {
-            return ChangeNotifierProvider.value(
-              value: e,
-              child: SearchedSong(),
-            );
-          })
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            ...history.map((e) {
+              return ChangeNotifierProvider.value(
+                value: e,
+                child: SearchedSong(),
+              );
+            }),
+            SizedBox(
+              height: 60,
+            )
+          ],
+        ),
       ),
     );
   }
