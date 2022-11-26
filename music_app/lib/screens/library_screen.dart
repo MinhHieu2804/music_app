@@ -14,7 +14,6 @@ class _LibraryScreenState extends State<LibraryScreen>
   late TabController control;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     control = TabController(length: 2, vsync: this);
   }
@@ -46,7 +45,7 @@ class _LibraryScreenState extends State<LibraryScreen>
                   Align(
                     alignment: Alignment.center,
                     child: Tab(
-                      text: 'Likes',
+                      text: 'History',
                     ),
                   ),
                 ],
