@@ -44,13 +44,48 @@ const createSong = async (req, res) => {
 
 const getSongs = async (req, res) => {
   try {
-    const { page = 1, size = 20 } = req.query;
+    const { page = 1, size = 20, name = "" } = req.query;
 
     const resData = await songs.findAndCountAll({
       limit: size - 0,
       offset: (page - 1) * (size - 0),
       attributes: ["id", "image", "name"],
+      where: {
+        name: {
+          [Sequelize.Op.like]: `%${name}%`,
+        },
+      },
     });
+
+    const ids = resData.rows.map((item) => item.id);
+
+    const artistList = await artist_song.findAll({
+      include: [
+        {
+          model: artists,
+        },
+      ],
+      where: {
+        song_id: {
+          [Sequelize.Op.in]: ids,
+        },
+      },
+    });
+
+    const data = resData.rows.map((song) => {
+      let s = { ...song.dataValues, artists: [] };
+      for (let i = 0; i < artistList.length; i++) {
+        const ar = artistList[i].dataValues;
+        if (s.id === ar.song_id) {
+          s.artists = !s.artists.length
+            ? [...ar.artists]
+            : [...s.artists, ...ar.artists];
+        }
+      }
+      return s;
+    });
+
+    resData.rows = data;
 
     const response = new Response(200, "OK", resData);
     res.status(200).send(response);
@@ -75,19 +110,29 @@ const getSongDetails = async (req, res) => {
       return res.status(404).send(response);
     }
 
-    const artistData = await artist_song.findAll({
-      include: [
-        {
-          model: songs,
+    const [artistData, temp] = await Promise.all([
+      artist_song.findAll({
+        include: [
+          {
+            model: songs,
+          },
+          {
+            model: artists,
+          },
+        ],
+        where: {
+          song_id: id,
         },
+      }),
+      songs.update(
+        { play_count: ++songData.play_count },
         {
-          model: artists,
-        },
-      ],
-      where: {
-        song_id: id,
-      },
-    });
+          where: {
+            id,
+          },
+        }
+      ),
+    ]);
 
     const resData = {
       ...songData.dataValues,
@@ -104,8 +149,69 @@ const getSongDetails = async (req, res) => {
   }
 };
 
+const getSongsByArtist = async (req, res) => {
+  try {
+    const { artistId } = req.params;
+
+    const resData = await artist_song.findAll({
+      include: [
+        {
+          model: songs,
+        },
+        {
+          model: artists,
+        },
+      ],
+      where: {
+        artist_id: artistId,
+      },
+    });
+
+    const data = resData.reduce((arr, item) => {
+      return [...arr, ...item.songs];
+    }, []);
+
+    const response = new Response(200, "OK", data);
+    res.status(200).send(response);
+  } catch (error) {
+    const response = new Response(500, "Error", error);
+    res.status(500).send(response);
+  }
+};
+
+const deleteSong = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const songRes = await songs.findOne({
+      where: {
+        id,
+      },
+    });
+
+    if (!songRes) {
+      const response = new Response(404, "Song does not exist");
+      return res.status(404).send(response);
+    }
+
+    const resData = await songs.destroy({
+      where: {
+        id,
+      },
+    });
+
+    const response = new Response(200, "OK", resData);
+    res.status(200).send(response);
+  } catch (error) {
+    const response = new Response(500, "Error", error);
+    res.status(500).send(response);
+  }
+};
+
 module.exports = {
   createSong,
   getSongs,
   getSongDetails,
+  getSongsByArtist,
+  deleteSong,
 };

@@ -14,8 +14,7 @@ class Aritsts with ChangeNotifier {
 
   Future<void> fetchArtistList() async {
     try {
-      final url =
-          Uri.parse('https://conkhunglongnene.site/artist?page=1&size=50');
+      final url = Uri.parse('http://10.0.2.2:3001/artist?page=1&size=50');
       final response = await http.get(url);
       final reponseData = json.decode(response.body);
       if (reponseData['status'] > 200) {
@@ -25,7 +24,7 @@ class Aritsts with ChangeNotifier {
       final List<Artist> loadedArtists = [];
       reponseData['data']['rows'].forEach((value) {
         loadedArtists.add(Artist(value['id'],
-            'https://conkhunglongnene.site' + value['image'], value['name']));
+            'http://10.0.2.2:3001' + value['image'], value['name']));
       });
       _items = loadedArtists;
     } catch (err) {

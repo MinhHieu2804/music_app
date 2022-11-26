@@ -19,5 +19,16 @@ module.exports = function (sequelize, Sequelize) {
     { createdAt: false, updatedAt: false, freezeTableName: true }
   );
 
+  Tag_Song.associate = function (models) {
+    Tag_Song.hasMany(models.tags, {
+      foreignKey: "id",
+      sourceKey: "tag_id",
+    });
+    Tag_Song.hasMany(models.songs, {
+      foreignKey: "id",
+      sourceKey: "song_id",
+    });
+  };
+
   return Tag_Song;
 };

@@ -6,7 +6,7 @@ import 'package:music_app/providers/artist.dart';
 import 'package:music_app/providers/song.dart';
 import 'package:http/http.dart' as http;
 
-const URL = 'https://conkhunglongnene.site';
+const URL = 'http://10.0.2.2:3001';
 
 class Search with ChangeNotifier {
   List<Song> _songItems = [];
@@ -20,8 +20,8 @@ class Search with ChangeNotifier {
       return;
     }
     try {
-      final url = Uri.parse(
-          'https://conkhunglongnene.site/song?size=20&page=1&name=$word');
+      final url =
+          Uri.parse('http://10.0.2.2:3001/song?size=20&page=1&name=$word');
       final response = await http.get(url);
       final responseData = json.decode(response.body);
       if (responseData['status'] > 200) {
@@ -35,8 +35,8 @@ class Search with ChangeNotifier {
         loadedSongs.add(Song(song['id'], URL + song['image'], song['name']));
       });
       _songItems = loadedSongs;
-      final url2 = Uri.parse(
-          'https://conkhunglongnene.site/artist?page=1&size=50&name=$word');
+      final url2 =
+          Uri.parse('http://10.0.2.2:3001/artist?page=1&size=50&name=$word');
       final response2 = await http.get(url2);
       final responseData2 = json.decode(response2.body);
       if (responseData2['status'] > 200) {

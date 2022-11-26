@@ -24,11 +24,16 @@ const createArtist = async (req, res) => {
 
 const getArtists = async (req, res) => {
   try {
-    const { page = 1, size = 20 } = req.query;
+    const { page = 1, size = 20, name = "" } = req.query;
 
     const resData = await artists.findAndCountAll({
       limit: size - 0,
       offset: (page - 1) * (size - 0),
+      where: {
+        name: {
+          [Sequelize.Op.like]: `%${name}%`,
+        },
+      },
     });
 
     const response = new Response(200, "OK", resData);

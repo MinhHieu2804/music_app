@@ -9,7 +9,7 @@ import 'package:music_app/providers/song.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
-const URL = 'https://conkhunglongnene.site';
+const URL = 'http://10.0.2.2:3001';
 
 class Songs with ChangeNotifier {
   List<Song> _items = [];
@@ -35,8 +35,7 @@ class Songs with ChangeNotifier {
 
   Future<void> fetchHomeSong() async {
     try {
-      final url =
-          Uri.parse('https://conkhunglongnene.site/song?size=20&page=1');
+      final url = Uri.parse('http://10.0.2.2:3001/song?size=20&page=1');
       final response = await http.get(url);
       final responseData = json.decode(response.body);
       if (responseData['status'] > 200) {
@@ -48,11 +47,11 @@ class Songs with ChangeNotifier {
       responseData['data']['rows'].forEach((value) {
         List<Artist> artistsT = [];
         value['artists'].forEach((v) {
-          artistsT.add(Artist(v['id'],
-              'https://conkhunglongnene.site' + v['image'], v['name']));
+          artistsT.add(
+              Artist(v['id'], 'http://10.0.2.2:3001' + v['image'], v['name']));
         });
         loadedSong.add(
-          Song(value['id'], 'https://conkhunglongnene.site' + value['image'],
+          Song(value['id'], 'http://10.0.2.2:3001' + value['image'],
               value['name'],
               artists: artistsT),
         );
@@ -65,7 +64,7 @@ class Songs with ChangeNotifier {
 
   Future<void> fetchSongofArtist(int id) async {
     try {
-      final url = Uri.parse('https://conkhunglongnene.site/song/artist/$id');
+      final url = Uri.parse('http://10.0.2.2:3001/song/artist/$id');
       final response = await http.get(url);
       final responseData = json.decode(response.body);
       if (responseData['status'] > 200) {
@@ -74,8 +73,8 @@ class Songs with ChangeNotifier {
       final List<Song> loadedSongs = [];
 
       responseData['data'].forEach((song) {
-        loadedSongs.add(Song(song['id'],
-            'https://conkhunglongnene.site' + song['image'], song['name']));
+        loadedSongs.add(Song(
+            song['id'], 'http://10.0.2.2:3001' + song['image'], song['name']));
       });
       _itemArtist = loadedSongs;
     } catch (err) {
@@ -86,8 +85,7 @@ class Songs with ChangeNotifier {
   Future<void> fetchPlaylistSong(int id, BuildContext context) async {
     try {
       final token = Provider.of<Auth>(context, listen: false).token;
-      final url =
-          Uri.parse('https://conkhunglongnene.site/playlist/details/$id');
+      final url = Uri.parse('http://10.0.2.2:3001/playlist/details/$id');
       final response = await http.get(url, headers: {
         'Authorization': 'Bearer ' + token,
       });
@@ -109,7 +107,7 @@ class Songs with ChangeNotifier {
 
   Future<void> fetchAlbumSongs(int id) async {
     try {
-      final url = Uri.parse('https://conkhunglongnene.site/album/details/$id');
+      final url = Uri.parse('http://10.0.2.2:3001/album/details/$id');
       final response = await http.get(url);
       final responseData = json.decode(response.body);
       if (responseData['status'] > 200) {

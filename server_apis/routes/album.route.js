@@ -25,5 +25,7 @@ router.post(
 );
 
 router.get("/", albumController.getAlbums);
+router.get("/details/:id", albumController.getAlbumDetails);
+router.put("/:id", authMiddleware, albumController.addSongsToAlbum);
 
 module.exports = router;
