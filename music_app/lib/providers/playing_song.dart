@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:music_app/providers/artist.dart';
 import 'package:http/http.dart' as http;
+import 'package:music_app/providers/song.dart';
 
 const URL = 'https://conkhunglongnene.site';
 
@@ -19,6 +20,7 @@ class PlayingSong with ChangeNotifier {
   AudioPlayer audioPlayer = new AudioPlayer();
   Duration duration = Duration(seconds: 0);
   Duration position = Duration(seconds: 0);
+  List<Song> history = [];
 
   Future<void> setPlayingSong(int id) async {
     final url = Uri.parse('https://conkhunglongnene.site/song/$id');
@@ -38,6 +40,8 @@ class PlayingSong with ChangeNotifier {
     artists = loadedA;
     isPlaying = true;
     play();
+    history.removeWhere((v) => v.id == id);
+    history.add(Song(id, image as String, name as String));
     notifyListeners();
   }
 
