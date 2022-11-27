@@ -2,11 +2,11 @@
 
 ## Introduction
 
-Music App is a music-streaming application for music enthusiasts and music lovers. Find your favourite tunes, play it and add it into your playlist; all can be done using Music App.
+Music App is a music-streaming application for music enthusiasts and music lovers. Find your favourite tunes, play it and add it into your playlist - all can be done using Music App.
 
 ## Installation guide
 
-This app is wrtten using Flutter. To run the app, following those steps below:
+This app is wrtten using Flutter. To run the app, follow those steps below:
 
 1. Install flutter. [Flutter's official guide](https://docs.flutter.dev/get-started/install) covers all the thing you need to do step-by-step.
 2. Clone the [project's source code](https://github.com/MinhHieu2804/music_app).
